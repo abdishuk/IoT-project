@@ -45,6 +45,86 @@ app.get("/lamps/lamp/:id", async (req, res) => {
   }
 });
 
+// get status of lamp 0
+
+app.get("/lamps/:id", async (req, res) => {
+  const lamp0 = await Descriptor.findById(req.params.id);
+  if (lamp0) {
+    const lampoStatus = lamp0.m2mcnt.st;
+    res.send(lampoStatus);
+  }
+});
+
+// update status of a lamp
+app.put("/lamps/:id", async (req, res) => {
+  let status = req.query.status;
+  console.log("stauts", status, typeof status);
+  if (status === false || status === 0) {
+    status = 0;
+  } else if (status === true || status === 1 || status === "true") {
+    console.log("status1", status, typeof status);
+    status = 1;
+  }
+
+  //on
+  try {
+    const lamp0 = await Descriptor.findById(req.params.id);
+    console.log("lamp0", lamp0);
+
+    if (lamp0) {
+      //of
+      lamp0.m2mcnt.st = status;
+      console.log("newLamp", lamp0);
+      await lamp0.save();
+    }
+    const newlamp0 = await Descriptor.findById(req.params.id);
+
+    res.send(newlamp0);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// update status of both lamps
+
+app.put("/lamps", async (req, res) => {
+  let status = req.query.status;
+  console.log("stauts", status, typeof status);
+  if (status === false || status === 0) {
+    status = 0;
+  } else if (status === true || status === 1 || status === "true") {
+    console.log("status1", status, typeof status);
+    status = 1;
+  }
+
+  //on
+  try {
+    const lamp0 = await Descriptor.findById("6121565cb3981420bc939ed8");
+    console.log("lamp0", lamp0);
+    const lamp1 = await Descriptor.findById("6121565cb3981420bc939eda");
+    console.log("lamp01", lamp1);
+
+    if (lamp0) {
+      //of
+      lamp0.m2mcnt.st = status;
+      console.log("newLamp", lamp0);
+      await lamp0.save();
+    }
+    if (lamp1) {
+      //of
+      lamp1.m2mcnt.st = status;
+      console.log("newLamp", lamp0);
+      await lamp1.save();
+    }
+
+    const newStatus = lamp1.m2mcnt.st;
+
+    res.send(newStatus);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // getting lamp descriptor by Id
 
 app.get("/lamps/lamp/desc/:id", async (req, res) => {

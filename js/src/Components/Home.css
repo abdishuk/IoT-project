@@ -1,3 +1,7 @@
 .home {
   flex: 0.6;
 }
+.on,
+#on {
+  background-color: #feca57;
+}
